@@ -4,8 +4,8 @@ const http = require('http'),
 
 http.createServer((request, response) => {
   var addr = request.url,
-    q = url.parse(addr, true),
-    filePath = '';
+      q = url.parse(addr, true),
+      filePath = '';
 
   if (q.pathname.includes('documentation')) {
     filePath = (__dirname + '/documentation.html');
