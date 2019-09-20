@@ -1,35 +1,75 @@
 const http = require('http'),
       fs = require('fs'),
       url = require('url'),
+      methodOverride = require('method-override'),
       bodyParser = require('body-parser'),
-      express = require('express');
+      express = require('express'),
+      morgan = require('morgan');
 
-http.createServer((request, response) => {
-  var addr = request.url,
-      q = url.parse(addr, true),
-      filePath = '';
+// Initalise express
+const app = express();
 
-  if (q.pathname.includes('documentation')) {
-    filePath = (__dirname + '/documentation.html');
-  } else {
-    filePath = 'index.html';
+let topMovies = [{
+    title: 'Spider-Man: Far from Home',
+    author: 'Jon Watts'
+  },
+  {
+    title: 'Downton Abbey',
+    author: ' Michael Engler'
+  },
+  {
+    title: 'Angel Has Fallen',
+    author: 'Ric Roman Waugh'
+  },
+  {
+    title: 'Fast & Furious: Hobbs & Shaw',
+    director: 'David Leitch'
+  },
+  {
+    title: 'Toy Story 4',
+    director: 'Josh Cooley'
+  },
+  {
+    title: 'Young Sherlock Holmes',
+    director: 'Barry Levinson'
+  },
+  {
+    title: 'Sherock Holmes: A Game of Shadows',
+    director: 'Guy Ritchie'
+  },
+  {
+    title: 'Lock, Stock and Two Smoking Barrels',
+    director: 'Guy Ritchie'
+  },
+  {
+    title: 'Scott Pilgrim Vs. The World',
+    director: 'Edgar Wright'
+  },
+  {
+    title: 'Baby Driver',
+    director: 'Edgar Wright'
   }
+]
 
-  fs.readFile(filePath, function(err, data) {
-    if (err) {
-      throw err;
-    }
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+app.use(methodOverride());
+app.use(morgan('common'));
+app.use(express.static('public'));
 
-    response.writeHead(200, { 'Content-Type': 'text/html' });
-    response.write(data);
-    response.end();
-  });
+// Routes
+app.get('/', function(req, res) {
+  res.sendFile('index.html');
+});
 
-  fs.appendFile('log.txt', 'URL: ' + addr + '\nTimestamp: ' + new Date() + '\n\n', function(err) {
-    if (err) {
-      console.log(err);
-    } else {
-    console.log('Added to log.');
-    }
-  });
-}).listen(8080);
+app.get('/documentation', function(req, res) {
+  res.sendFile('documentation.html');
+});
+
+app.get('/movies', function(req, res) {
+  res.json(topMovies);
+});
+
+app.listen(3000);
