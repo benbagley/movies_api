@@ -12,11 +12,11 @@ const app = express();
 let Users = [
   {
     id: "1",
-    name: "Lorenzo",
-    username: "lorepirri",
+    name: "Ben",
+    username: "Bagley",
     password: "",
-    email: "",
-    birthday: "",
+    email: "hello@benbagley.dev",
+    birthday: "03-24-1996",
     favorites: ["3"]
   }
 ];
