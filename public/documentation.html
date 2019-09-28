@@ -1,1 +1,144 @@
-<h1>documentation</h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>myFlix App</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    />
+
+    <link href="css/styles.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <!-- body -->
+  <body>
+    <!-- header -->
+    <nav class="navbar navbar-dark bg-dark">
+      <section class="container-fluid">
+        <a class="navbar-brand" href="#">myFlix App - Documentation</a>
+      </section>
+    </nav>
+
+    <section class="container-fluid">
+      <p>This is my movie app where the user can find information about movies.</p>
+      <p>The table below describes each endpoint of this API and how to access it.</p>
+
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Description</th>
+            <th scope="col">URL</th>
+            <th scope="col">HTTP method</th>
+            <th scope="col">Request body data format</th>
+            <th scope="col">Response body data format</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Get a list of all movies</td>
+            <td>/movies</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>JSON object holding data about all movies</td>
+          </tr>
+          <tr>
+            <td>Get data about a single movie by title</td>
+            <td>/movies/[title]</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>
+              JSON object holding data about a single movie, containing title,
+              description, genre, director,image URL
+            </td>
+          </tr>
+          <tr>
+            <td>Get data about a movie genre</td>
+            <td>/genre/[name]</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>
+              JSON object holding data about a movie genre, containing name and
+              description.
+            </td>
+          </tr>
+          <tr>
+            <td>Get data about a director</td>
+            <td>/director/[name]</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>
+              JSON object holding data about a director, containing name, bio,
+              birth year, death year.
+            </td>
+          </tr>
+          <tr>
+            <td>Add a new user to the registry.</td>
+            <td>/users</td>
+            <td>POST</td>
+            <td>
+              JSON object holding data about the user to add, structured like:
+              <p>
+                { username: "John Doe", password: "pw123", email:
+                "john.doe@gmail.com", dateofbirth: "12/20/66"
+              </p>
+            </td>
+            <td>
+              JSON object holding data about the user that was add, structured
+              like:
+              <p>
+                { id: 7, username: "John Doe", password: "pw123", email:
+                "john.doe@gmail.com", dateofbirth: "12/20/66"
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>Update a user's information</td>
+            <td>/users/[username]/[password]/[email]/[date of birth]</td>
+            <td>PUT</td>
+            <td>None</td>
+            <td>A text message indicating the user's information was updated.</td>
+          </tr>
+          <tr>
+            <td>Add a movie to the user's favorites list</td>
+            <td>/favorites/[username]/[title]</td>
+            <td>POST</td>
+            <td>None</td>
+            <td>
+              A text message indicating the movie title was added to the user's
+              favorites list.
+            </td>
+          </tr>
+          <tr>
+            <td>Delete a movie from the user's favorites list</td>
+            <td>/favorites/[username]/[title]</td>
+            <td>DELETE</td>
+            <td>None</td>
+            <td>
+              A text message indicating the movie title was deleted from the
+              user's favorites list.
+            </td>
+          </tr>
+          <tr>
+            <td>Remove a user from the registry.</td>
+            <td>/users/[username]/[title]</td>
+            <td>DELETE</td>
+            <td>None</td>
+            <td>
+              A text message indicating the user was removed from the registry.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </body>
+</html>
