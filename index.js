@@ -42,6 +42,7 @@ app.get('/documentation', function(req, res) {
 
 // AUTH ROUTES
 let auth = require('./auth')(app);
+let authentication = passport.authenticate('jwt', { session: false });
 
 // USER ROUTES
 // Get all users
@@ -147,7 +148,7 @@ app.post('/users/:Username/Movies/:MovieID', (req, res) => {
 
 // MOVIE ROUTES
 // Gets list of all movies
-app.get("/movies", passport.authenticate('jwt', { session: false }), function(req, res) {
+app.get("/movies", authentication, function(req, res) {
   Movies.find()
     .then(function(movies) {
       res.status(201).json(movies);
