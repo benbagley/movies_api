@@ -8,6 +8,8 @@ const http = require('http'),
 
 const mongoose = require('mongoose');
 const Models = require('./models.js');
+const passport = require('passport');
+require('./passport');
 
 // Initalise express
 const app = express();
@@ -37,6 +39,9 @@ app.get('/', function(req, res) {
 app.get('/documentation', function(req, res) {
   res.sendFile('documentation.html')
 });
+
+// AUTH ROUTES
+let auth = require('./auth')(app);
 
 // USER ROUTES
 // Get all users
@@ -142,8 +147,14 @@ app.post('/users/:Username/Movies/:MovieID', (req, res) => {
 
 // MOVIE ROUTES
 // Gets list of all movies
-app.get('/movies', function(req, res) {
-  res.send('Successful GET request returning data about all movies.')
+app.get("/movies", passport.authenticate('jwt', { session: false }), function(req, res) {
+  Movies.find()
+    .then(function(movies) {
+      res.status(201).json(movies);
+    }).catch(function(error) {
+      console.error(error);
+      res.status(500).send("Error: " + error);
+    });
 });
 
-app.listen(3000);
+app.listen(8080);
