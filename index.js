@@ -4,7 +4,8 @@ const http = require('http'),
       methodOverride = require('method-override'),
       bodyParser = require('body-parser'),
       express = require('express'),
-      morgan = require('morgan');
+      morgan = require('morgan'),
+      { check, validationResult } = require('express-validator');
 
 const mongoose = require('mongoose');
 const Models = require('./models.js');
@@ -13,6 +14,24 @@ require('./passport');
 
 // Initalise express
 const app = express();
+
+// Implement CORS
+const cors = require('cors');
+app.use(cors()); // Allows all origin requests
+
+// Custom CORS example
+// let allowedOrigins = ['http://localhost:8080', 'http://test.herokuapp.com']; // Heroku app will get added here when live
+
+// app.use(cors({
+//   origin: function(origin, callback){
+//     if(!origin) return callback(null, true);
+//     if(allowedOrigins.indexOf(origin) === -1) { // If a specific origin isn’t found on the list of allowed origins
+//       let message = 'The CORS origin policy for this application does not allow access from origin ' + origin;
+//       return callback(new Error(message), false);
+//     }
+//     return callback(null, true);
+//   }
+// }));
 
 // Connect mongodb database via connection string
 mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true });
@@ -58,20 +77,34 @@ app.get('/users', (req, res) => {
 });
 
 // Adds data for a new user
-app.post('/users', (req, res) => {
-  Users.findOne({ Username: req.body.username })
+app.post('/users',
+  // Validation
+  [check('Username', 'Username is required').isLength({ min: 5 }),
+  check('Username', 'Username contains non alphanumeric characters - not allowed').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email does not appear to be valid').isEmail()
+  ], (req, res) => {
+  // Check for errors
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  let hashedPassword = Users.hashPassword(req.body.Password);
+  Users.findOne({ Username: req.body.Username })
   .then(function(user) {
     if (user) {
       return res.status(400).send(req.body.Username + 'already exists')
     } else {
       Users.create({
         Username: req.body.Username,
-        Password: req.body.Password,
+        Password: hashedPassword,
         Email: req.body.Email,
         Birthday: req.body.Birthday
       })
       .then(function(user) { res.status(201).json(user) })
-      .catch(function(user) {
+      .catch(function(error) {
         console.error(error)
         res.status(500).send('Error ' + error)
       })
@@ -158,4 +191,7 @@ app.get("/movies", authentication, function(req, res) {
     });
 });
 
-app.listen(8080);
+let port = process.env.PORT || 8080;
+app.listen(port, "0.0.0.0", function() {
+  console.log(`Application is listening on port ${port}`);
+});
