@@ -34,7 +34,7 @@ app.use(cors()); // Allows all origin requests
 // }));
 
 // Connect mongodb database via connection string
-mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 // Database models
 const Movies = Models.Movie;
 const Users = Models.User;
