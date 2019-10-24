@@ -181,7 +181,7 @@ app.post('/users/:Username/Movies/:MovieID', (req, res) => {
 
 // MOVIE ROUTES
 // Gets list of all movies
-app.get("/movies", authentication, function(req, res) {
+app.get("/movies", function(req, res) {
   Movies.find()
     .then(function(movies) {
       res.status(201).json(movies);
