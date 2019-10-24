@@ -34,7 +34,7 @@ app.use(cors()); // Allows all origin requests
 // }));
 
 // Connect mongodb database via connection string
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://myFlixDBAdmin:LYPdNOMKN3hJ5Auw@myflixdb-2xnw2.mongodb.net/myFlixDB?retryWrites=true&w=majority', { useNewUrlParser: true });
 // Database models
 const Movies = Models.Movie;
 const Users = Models.User;
